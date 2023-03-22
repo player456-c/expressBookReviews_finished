@@ -60,32 +60,33 @@ function userHasReview(username,isbn){
         return true;
     }else{
         return false;
-    }
+    };
 };
 
 // Add or modify a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
     let isbn=req.params.isbn;
-    //let review=req.query.review;
+    let review=req.query.review;
     let username=req.session.authorization['username'];
+    //console.log(req.query);
+    //console.log(req.query.review);
+    //console.log(userHasReview(username,isbn));
+    books[isbn]['reviews'][username]=review;
 
-    console.log(userHasReview(username,isbn));
-    /* if(!userHasReview(username,isbn)){
-        books[isbn]['reviews'].push({
-
-        })
-    }else{
-
-    }; */
-
-
+    //console.log(books[isbn]['reviews'][username]);
     return res.send("PUT endpoint");
 });
 
 // Delete a book review
 regd_users.delete("/auth/review/:isbn", (req, res) => {
-    //Write your code here
-    return res.status(300).json({message: "Yet to be implemented"});
+    let isbn=req.params.isbn;
+    let username=req.session.authorization['username'];
+    if(userHasReview(username,isbn)){
+        delete books[isbn]['reviews'][username];
+    }else{
+        return res.send("You don't have a review of that book.")
+    };
+    return res.send("Your review were successfully deleted.");
   });
 
 module.exports.authenticated = regd_users;
