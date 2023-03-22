@@ -55,10 +55,8 @@ regd_users.post("/login", (req,res) => {
 });
 
 function userHasReview(username,isbn){
-    let users_review = books[isbn]['reviews'].filter((review)=>{
-        return (user.username === username)
-    });
-    if(users_review.length > 0){
+    let users_review = books[isbn]['reviews'][username];
+    if(users_review!=undefined){
         return true;
     }else{
         return false;
@@ -68,12 +66,20 @@ function userHasReview(username,isbn){
 // Add or modify a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
     let isbn=req.params.isbn;
-    let review=req.query.review;
+    //let review=req.query.review;
     let username=req.session.authorization['username'];
 
+    console.log(userHasReview(username,isbn));
+    /* if(!userHasReview(username,isbn)){
+        books[isbn]['reviews'].push({
+
+        })
+    }else{
+
+    }; */
 
 
-    return res.status(300).json({message: "Yet to be implemented"});
+    return res.send("PUT endpoint");
 });
 
 // Delete a book review
