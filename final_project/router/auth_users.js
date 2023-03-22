@@ -54,11 +54,33 @@ regd_users.post("/login", (req,res) => {
     }
 });
 
-// Add a book review
+function userHasReview(username,isbn){
+    let users_review = books[isbn]['reviews'].filter((review)=>{
+        return (user.username === username)
+    });
+    if(users_review.length > 0){
+        return true;
+    }else{
+        return false;
+    }
+};
+
+// Add or modify a book review
 regd_users.put("/auth/review/:isbn", (req, res) => {
-  //Write your code here
-  return res.status(300).json({message: "Yet to be implemented"});
+    let isbn=req.params.isbn;
+    let review=req.query.review;
+    let username=req.session.authorization['username'];
+
+
+
+    return res.status(300).json({message: "Yet to be implemented"});
 });
+
+// Delete a book review
+regd_users.delete("/auth/review/:isbn", (req, res) => {
+    //Write your code here
+    return res.status(300).json({message: "Yet to be implemented"});
+  });
 
 module.exports.authenticated = regd_users;
 module.exports.isValid = isValid;
