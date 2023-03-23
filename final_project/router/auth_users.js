@@ -72,9 +72,9 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     //console.log(req.query.review);
     let message="";
     if(!userHasReview(username,isbn)){
-        message="Your review has been added. If you want to update your review, simply write a new one.";
+        message=`Your review on book with ISBN ${isbn} has been added. If you want to update your review, simply write a new one.`;
     }else{
-        message="Your review has been updated.";
+        message=`Your review on book with ISBN ${isbn} has been updated.`;
     };
     console.log(userHasReview(username,isbn));
     books[isbn]['reviews'][username]=review;
