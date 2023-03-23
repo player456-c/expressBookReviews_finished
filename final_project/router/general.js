@@ -24,16 +24,17 @@ public_users.post("/register", (req,res) => {
 // Get the book list available in the shop
 public_users.get('/',function (req, res) {
     //console.log(req);
-    let all_books="";
-    async function getAllBooks(){
-        let myPromise=new Promise((resolve)=>{
+    let all_books=async()=>{
+        /* let myPromise=new Promise((resolve)=>{
             resolve(books);
         });
-        all_books = await myPromise;
-    }
-    getAllBooks();
-
-    return res.send(JSON.stringify({all_books},null,4));
+        all_books = await myPromise; */
+        return books;
+    };
+    all_books().then((value)=>{
+        return res.send(JSON.stringify({value},null,4));
+    });
+    //return res.send(JSON.stringify({books},null,4));
 });
 
 // Get book details based on ISBN
