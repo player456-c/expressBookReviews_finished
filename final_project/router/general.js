@@ -65,7 +65,7 @@ public_users.get('/author/:author',function (req, res) {
     });
 });
 
-// Get all books based on title
+// Asynchronously Get all books based on title
 public_users.get('/title/:title',function (req, res) {
     let title=req.params.title;
     let book_author_det=async()=>{
