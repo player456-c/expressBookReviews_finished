@@ -21,53 +21,67 @@ public_users.post("/register", (req,res) => {
     return res.status(404).json({message: "Unable to register user."});
 });
 
-// Get the book list available in the shop
+// Asynchronously Get the book list available in the shop
 public_users.get('/',function (req, res) {
     //console.log(req);
     let all_books=async()=>{
-        /* let myPromise=new Promise((resolve)=>{
-            resolve(books);
-        });
-        all_books = await myPromise; */
         return books;
     };
     all_books().then((value)=>{
         return res.send(JSON.stringify({value},null,4));
     });
-    //return res.send(JSON.stringify({books},null,4));
 });
 
-// Get book details based on ISBN
+// Asynchronously Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
     let isbn=req.params.isbn;
     //console.log(req);
-    return res.send(books[isbn]);
+    let book_isbn_det=async()=>{
+        return books[isbn];
+    };
+    book_isbn_det().then((value)=>{
+        //console.log(value);
+        return res.send(value);
+    });
 });
   
-// Get book details based on author
+// Asynchronously Get book details based on author
 public_users.get('/author/:author',function (req, res) {
     let author=req.params.author;
-    let filtered_books=[];
-    Object.keys(books).forEach(key => {
-        if(books[key]['author']===author){
-            filtered_books.push(books[key]);
-        };
+
+    let book_author_det=async()=>{
+        let filtered_books=[];
+        Object.keys(books).forEach(key => {
+            if(books[key]['author']===author){
+                filtered_books.push(books[key]);
+                //console.log(filtered_books);
+            };
+        });
+        return filtered_books;
+    };
+    book_author_det().then((value)=>{
+        //console.log(value);
+        return res.send(value);
     });
-    //console.log(filtered_books);
-    return res.send(filtered_books);
 });
 
 // Get all books based on title
 public_users.get('/title/:title',function (req, res) {
     let title=req.params.title;
-    let filtered_books=[];
-    Object.keys(books).forEach(key => {
-        if(books[key]['title']===title){
-            filtered_books.push(books[key]);
-        };
+    let book_author_det=async()=>{
+        let filtered_books=[];
+        Object.keys(books).forEach(key => {
+            if(books[key]['title']===title){
+                filtered_books.push(books[key]);
+                //console.log(filtered_books);
+            };
+        });
+        return filtered_books;
+    };
+    book_author_det().then((value)=>{
+        //console.log(value);
+        return res.send(value);
     });
-    //console.log(filtered_books);
-    return res.send(filtered_books);
 });
 
 //  Get book review
