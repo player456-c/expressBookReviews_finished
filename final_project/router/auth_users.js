@@ -70,11 +70,17 @@ regd_users.put("/auth/review/:isbn", (req, res) => {
     let username=req.session.authorization['username'];
     //console.log(req.query);
     //console.log(req.query.review);
-    //console.log(userHasReview(username,isbn));
+    let message="";
+    if(!userHasReview(username,isbn)){
+        message="Your review has been added. If you want to update your review, simply write a new one.";
+    }else{
+        message="Your review has been updated.";
+    };
+    console.log(userHasReview(username,isbn));
     books[isbn]['reviews'][username]=review;
 
     //console.log(books[isbn]['reviews'][username]);
-    return res.send("PUT endpoint");
+    return res.send(message);
 });
 
 // Delete a book review
