@@ -9,17 +9,32 @@ const public_users = express.Router();
 public_users.post("/register", (req,res) => {
     const username = req.body.username;
     const password = req.body.password;
-  
-    if (username && password){
-        if(!isValid(username)){ 
+
+    if(username && password){
+        if(!isValid(username)){
             users.push({"username":username,"password":password});
             return res.status(200).json({message: "User successfully registred. Now you can login"});
         }else{
-            return res.status(404).json({message: "User already exists!"});    
+            return res.status(404).json({message: "User already exists!"});
         };
     };
     return res.status(404).json({message: "Unable to register user."});
 });
+
+
+// Это чужое, для примера.
+public_users.post("/register", (req,res) => {
+    const { username, password } = req.body;
+    if (!username || !password) {
+      return res.status(400).json({ message: "Username and password are required" });
+    }
+    if (users.find((user) => user.username === username)) {
+      return res.status(409).json({ message: "Username already exists" });
+    }
+    users.push({ username, password });
+    return res.status(201).json({ message: "User registered successfully" });
+  });
+
 
 // Asynchronously Get the book list available in the shop
 public_users.get('/',function (req, res) {
@@ -31,6 +46,19 @@ public_users.get('/',function (req, res) {
         return res.send(JSON.stringify({value},null,4));
     });
 });
+
+public_users.get("/server/asynbooks", async function (req,res) {
+    try {
+      let response = await axios.get("http://localhost:5000/");
+      console.log(response.data);
+      return res.status(200).json(response.data);
+      
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({message: "Error getting book list"});
+    }
+});
+
 
 // Asynchronously Get book details based on ISBN
 public_users.get('/isbn/:isbn',function (req, res) {
@@ -44,7 +72,8 @@ public_users.get('/isbn/:isbn',function (req, res) {
         return res.send(value);
     });
 });
-  
+
+
 // Asynchronously Get book details based on author
 public_users.get('/author/:author',function (req, res) {
     let author=req.params.author;
@@ -65,6 +94,7 @@ public_users.get('/author/:author',function (req, res) {
     });
 });
 
+
 // Asynchronously Get all books based on title
 public_users.get('/title/:title',function (req, res) {
     let title=req.params.title;
@@ -84,11 +114,13 @@ public_users.get('/title/:title',function (req, res) {
     });
 });
 
+
 //  Get book review
 public_users.get('/review/:isbn',function (req, res) {
     let isbn=req.params.isbn;
     //console.log(req);
     return res.send(books[isbn]['reviews']);
 });
+
 
 module.exports.general = public_users;
